@@ -1,20 +1,21 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
+import axios from "axios";
 import Logo from "../../components/Logo";
-import Title from "../../components/Title";
 import Input from "../../components/Input";
+import Title from "../../components/Title";
 import MainButton from "../../components/MainButton";
 import RedirectButton from "../../components/RedirectButton";
-import { useState, useContext } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import axios from "axios";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [visible, setVisible] = useState(false);
-
+  // const [visible, setVisible] = useState(false);
+  const size = "main";
   const router = useRouter();
   const { login } = useContext(AuthContext);
 

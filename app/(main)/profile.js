@@ -1,9 +1,14 @@
 import { View, Text, StyleSheet } from "react-native";
+import MainButton from "../../components/MainButton";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function HomePage() {
+  const { logout } = useContext(AuthContext);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>profile !</Text>
+      <MainButton text="LOG OUT" func={logout} />
     </View>
   );
 }

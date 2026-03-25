@@ -1,14 +1,14 @@
 import axios from "axios";
-import { useState } from "react";
-import { useRouter } from "expo-router";
 import Logo from "../../components/Logo";
 import Input from "../../components/Input";
 import Title from "../../components/Title";
 import MainButton from "../../components/MainButton";
+import { useRouter } from "expo-router";
+import { useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import { LargeInput } from "../../components/LargeInput";
 import RedirectButton from "../../components/RedirectButton";
 import { KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
-import { AuthContext } from "../../context/AuthContext";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");

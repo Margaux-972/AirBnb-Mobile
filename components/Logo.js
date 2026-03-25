@@ -1,6 +1,6 @@
 import { View, Image, StyleSheet } from "react-native";
 
-const Logo = () => {
+const Logo = ({ size }) => {
   return (
     <View>
       <Image
@@ -18,5 +18,9 @@ const styles = StyleSheet.create({
   mainLogo: {
     height: 100,
     width: 100,
+  },
+  smallLogo: {
+    height: 40,
+    width: 40,
   },
 });
