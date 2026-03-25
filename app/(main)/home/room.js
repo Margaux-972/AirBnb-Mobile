@@ -1,11 +1,9 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import { Link } from "expo-router";
+import { View, Text, StyleSheet } from "react-native";
 
 export default function HomePage() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bienvenue sur Expo Router !</Text>
-      <Link href="/signin">go to Sign in page</Link>
+      <Text style={styles.title}>room !</Text>
     </View>
   );
 }

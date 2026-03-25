@@ -1,0 +1,16 @@
+import { StyleSheet, Text } from "react-native";
+import colors from "../assets/colors/index.json";
+
+const Title = ({ text }) => {
+  return <Text style={styles.text}>{text}</Text>;
+};
+
+export default Title;
+
+const styles = StyleSheet.create({
+  text: {
+    color: colors.grey,
+    fontWeight: 600,
+    fontSize: 24,
+  },
+});
