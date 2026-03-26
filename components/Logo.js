@@ -1,11 +1,11 @@
 import { View, Image, StyleSheet } from "react-native";
 
-const Logo = ({ size }) => {
+const Logo = ({ size = "main" }) => {
   return (
     <View>
       <Image
         source={require("../assets/pictures/logo.png")}
-        style={styles.mainLogo}
+        style={size === "small" ? styles.smallLogo : styles.mainLogo}
         resizeMode="contain"
       />
     </View>
@@ -22,5 +22,6 @@ const styles = StyleSheet.create({
   smallLogo: {
     height: 40,
     width: 40,
+    marginTop: 5,
   },
 });

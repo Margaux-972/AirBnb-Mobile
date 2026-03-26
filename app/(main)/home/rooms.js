@@ -5,10 +5,15 @@ import {
   FlatList,
   ActivityIndicator,
   Image,
+  ImageBackground,
 } from "react-native";
 import Logo from "../../../components/Logo";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import bg from "../../../assets/pictures/blackbg.jpg";
+// import Entypo from "@expo/vector-icons/Entypo";
+import Constants from "expo-constants";
+import RoomCard from "../../../components/RoomCard";
 
 export default function HomePage() {
   // const size = "smallLogo";
@@ -33,6 +38,7 @@ export default function HomePage() {
   if (loading) {
     return (
       <View style={styles.container}>
+        <Logo size="small" />
         <ActivityIndicator size="large" color="#FF5A5F" />
       </View>
     );
@@ -40,23 +46,15 @@ export default function HomePage() {
 
   return (
     <View style={styles.container}>
-      <Logo />
-      <Text style={styles.title}>HOME !</Text>
+      <View style={styles.logoContainer}>
+        <Logo size="small" />
+      </View>
+      {/* <Text style={styles.title}>HOME !</Text> */}
       <FlatList
         data={data}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => {
-          return (
-            <View style={styles.itemContainer}>
-              <Text>{item.title}</Text>
-              <Text>{item.price}</Text>
-              <Text>{item.reviews} reviews</Text>
-              <Image
-                source={{ uri: item.photos[0].url }}
-                style={{ height: 80, width: "100%" }}
-              />
-            </View>
-          );
+          return <RoomCard item={item} />;
         }}
       />
     </View>
@@ -67,16 +65,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    // alignItems: "center",
+    marginTop: Constants.statusBarHeight,
+  },
+  logoContainer: {
     alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  itemContainer: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    width: "100%",
   },
 });
