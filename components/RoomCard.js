@@ -1,29 +1,35 @@
-import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
 import bg from "../assets/pictures/blackbg.jpg";
+import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
+import { Link } from "expo-router";
 
 const RoomCard = ({ item }) => {
   return (
-    <View style={styles.itemContainer}>
-      <View style={styles.relative}>
-        <Image source={{ uri: item.photos[0].url }} style={styles.roomImage} />
-        <ImageBackground source={bg} style={styles.priceContainer}>
-          <Text style={styles.itemPrice}>{item.price} €</Text>
-        </ImageBackground>
-      </View>
-
-      <View style={styles.legend}>
-        <View style={styles.infoSection}>
-          <Text style={styles.title} numberOfLines={1}>
-            {item.title}
-          </Text>
-          <Text style={styles.reviews}>{item.reviews} reviews</Text>
+    <Link href={`/home/${item._id}`}>
+      <View style={styles.itemContainer}>
+        <View style={styles.relative}>
+          <Image
+            source={{ uri: item.photos[0].url }}
+            style={styles.roomImage}
+          />
+          <ImageBackground source={bg} style={styles.priceContainer}>
+            <Text style={styles.itemPrice}>{item.price} €</Text>
+          </ImageBackground>
         </View>
-        <Image
-          source={{ uri: item.user.account.photo.url }}
-          style={styles.userAvatar}
-        />
+
+        <View style={styles.legend}>
+          <View style={styles.infoSection}>
+            <Text style={styles.title} numberOfLines={1}>
+              {item.title}
+            </Text>
+            <Text style={styles.reviews}>{item.reviews} reviews</Text>
+          </View>
+          <Image
+            source={{ uri: item.user.account.photo.url }}
+            style={styles.userAvatar}
+          />
+        </View>
       </View>
-    </View>
+    </Link>
   );
 };
 
@@ -57,7 +63,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   infoSection: {
-    flex: 1, // Permet au texte de ne pas pousser l'avatar hors de l'écran
+    flex: 1,
     marginRight: 10,
   },
   title: {

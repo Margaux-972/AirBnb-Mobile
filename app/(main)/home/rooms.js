@@ -10,13 +10,11 @@ import {
 import Logo from "../../../components/Logo";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import bg from "../../../assets/pictures/blackbg.jpg";
 // import Entypo from "@expo/vector-icons/Entypo";
 import Constants from "expo-constants";
 import RoomCard from "../../../components/RoomCard";
 
-export default function HomePage() {
-  // const size = "smallLogo";
+export default function RoomsPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -34,7 +32,7 @@ export default function HomePage() {
     };
     fetchData();
   }, []);
-  // console.log(data);
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -49,7 +47,6 @@ export default function HomePage() {
       <View style={styles.logoContainer}>
         <Logo size="small" />
       </View>
-      {/* <Text style={styles.title}>HOME !</Text> */}
       <FlatList
         data={data}
         keyExtractor={(item) => item._id}
@@ -65,7 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    // alignItems: "center",
     marginTop: Constants.statusBarHeight,
   },
   logoContainer: {
