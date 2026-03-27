@@ -4,8 +4,11 @@ import { TouchableOpacity } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import RoomCard from "../../../components/RoomCard";
 import { View, Text, StyleSheet } from "react-native";
+import Logo from "../../../components/Logo";
+import MapCompo from "../../../components/MapCompo";
+// import Fontisto from "@expo/vector-icons/Fontisto";
 
-export default function HomePage() {
+export default function RoomPage() {
   const { id } = useLocalSearchParams();
 
   const [data, setData] = useState(null);
@@ -20,6 +23,7 @@ export default function HomePage() {
         );
         setData(response.data);
         setLoading(false);
+        // console.log(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -32,6 +36,7 @@ export default function HomePage() {
 
   return (
     <View style={styles.container}>
+      <Logo size="small" />
       {loading ? (
         <Text>Loading...</Text>
       ) : (
@@ -48,6 +53,8 @@ export default function HomePage() {
               {expanded ? "Show less" : "Show more"}
             </Text>
           </TouchableOpacity>
+          <MapCompo location={data} />
+          {/* {console.log(data.location)} */}
         </View>
       )}
     </View>

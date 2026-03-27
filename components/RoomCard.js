@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 
 const RoomCard = ({ item }) => {
   return (
-    <Link href={`/home/${item._id}`}>
+    <Link href={`/home/room?id=${item._id}`}>
       <View style={styles.itemContainer}>
         <View style={styles.relative}>
           <Image
