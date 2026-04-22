@@ -1,15 +1,18 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { TouchableOpacity } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import RoomCard from "../../../components/RoomCard";
 import { View, Text, StyleSheet } from "react-native";
 import Logo from "../../../components/Logo";
 import MapCompo from "../../../components/MapCompo";
-// import Fontisto from "@expo/vector-icons/Fontisto";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import colors from "../../../assets/colors/index.json";
+import Constants from "expo-constants";
 
 export default function RoomPage() {
   const { id } = useLocalSearchParams();
+  const router = useRouter();
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,12 +39,17 @@ export default function RoomPage() {
 
   return (
     <View style={styles.container}>
-      <Logo size="small" />
       {loading ? (
         <Text>Loading...</Text>
       ) : (
         <View>
-          <RoomCard item={data} />
+          <View style={styles.logoContainer}>
+            <Logo size="small" />
+          </View>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text style={styles.backButton}>←</Text>
+          </TouchableOpacity>
+          <RoomCard item={data} isSlider={true} />
           <TouchableOpacity onPress={() => setExpanded(!expanded)}>
             <Text
               numberOfLines={expanded ? undefined : 3}
@@ -49,9 +57,23 @@ export default function RoomPage() {
             >
               {data.description}
             </Text>
-            <Text style={{ color: "ligthgrey", marginTop: 5, padding: 10 }}>
-              {expanded ? "Show less" : "Show more"}
-            </Text>
+            <View style={styles.overview}>
+              <Text
+                style={{
+                  color: colors.grey,
+                  marginTop: 5,
+                  paddingBottom: 10,
+                  marginRight: 5,
+                }}
+              >
+                {expanded ? "Show less" : "Show more"}
+              </Text>
+              <AntDesign
+                name={expanded ? "caret-up" : "caret-down"}
+                size={16}
+                color="#717171"
+              />
+            </View>
           </TouchableOpacity>
           <MapCompo location={data} />
           {/* {console.log(data.location)} */}
@@ -66,9 +88,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: Constants.statusBarHeight,
+  },
+  logoContainer: {
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
+  },
+  overview: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    marginTop: 5,
+  },
+  backButton: {
+    position: "absolute",
+    left: 10,
+    bottom: 5,
+    color: colors.grey,
   },
 });

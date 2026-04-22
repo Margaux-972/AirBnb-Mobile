@@ -10,7 +10,6 @@ import {
 import Logo from "../../../components/Logo";
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import Entypo from "@expo/vector-icons/Entypo";
 import Constants from "expo-constants";
 import RoomCard from "../../../components/RoomCard";
 
