@@ -3,7 +3,7 @@ import MainButton from "../../components/MainButton";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
-export default function HomePage() {
+export default function ProfilePage() {
   const { logout } = useContext(AuthContext);
 
   return (

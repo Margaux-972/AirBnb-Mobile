@@ -35,7 +35,9 @@ export default function RoomsPage() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Logo size="small" />
+        <View style={styles.logoContainer}>
+          <Logo size="small" />
+        </View>
         <ActivityIndicator size="large" color="#FF5A5F" />
       </View>
     );
