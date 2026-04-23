@@ -1,10 +1,20 @@
 import { View, Text, StyleSheet } from "react-native";
 import MainButton from "../../components/MainButton";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import colors from "../../assets/colors/index.json";
 
 export default function ProfilePage() {
-  const { logout } = useContext(AuthContext);
+  const [loading, setLoading] = useState;
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [picture, setPicture] = useState(null);
+  const [description, setDescription] = useState("");
+  const [infoModified, setInfoModified] = useState(false);
+  const [displayMessage, setDisplayMessage] = useState(null);
+  const [pictureModified, setPictureModified] = useState(false);
+
+  const { logout, userToken, userId } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
