@@ -1,8 +1,7 @@
 import { StyleSheet, TextInput } from "react-native";
-
 import colors from "../assets/colors/index.json";
 
-export const LargeInput = ({ state, setState, placeholder }) => {
+const LargeInput = ({ state, setState, placeholder }) => {
   return (
     <TextInput
       style={styles.textInput}
@@ -16,6 +15,7 @@ export const LargeInput = ({ state, setState, placeholder }) => {
   );
 };
 
+export default LargeInput;
 const styles = StyleSheet.create({
   textInput: {
     borderColor: colors.lightPink,

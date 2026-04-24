@@ -46,7 +46,7 @@ export default function AroundMePage() {
         setData(coordsTab);
         setLoading(false);
       } catch (error) {
-        alert("An error occurred");
+        alert("To use this service you need to authorize location");
       }
     };
     getLocationAndData();

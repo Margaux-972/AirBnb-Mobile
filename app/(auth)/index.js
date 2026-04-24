@@ -14,7 +14,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  // const [visible, setVisible] = useState(false);
   const size = "main";
   const router = useRouter();
   const { login } = useContext(AuthContext);
