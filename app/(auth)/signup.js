@@ -3,10 +3,10 @@ import Logo from "../../components/Logo";
 import Input from "../../components/Input";
 import Title from "../../components/Title";
 import MainButton from "../../components/MainButton";
+import LargeInput from "../../components/LargeInput";
 import { useRouter } from "expo-router";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { LargeInput } from "../../components/LargeInput";
 import RedirectButton from "../../components/RedirectButton";
 import { KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
 
@@ -90,67 +90,3 @@ const styles = StyleSheet.create({
     padding: 45,
   },
 });
-
-// import { Link } from "expo-router";
-// import { View, Text, StyleSheet } from "react-native";
-// import axios from "axios";
-// import { useState } from "react";
-// import { KeyboardAvoidingView, ScrollView, Platform } from "react-native";
-// import Inputs from "../../components/inputs";
-// import LogoTitle from "../../components/logoTitle";
-// import BottomForm from "../../components/bottomForm";
-
-// export default function Signup() {
-//   const [email, setEmail] = useState("");
-//   const [signup, setSignup] = useState("Sign up");
-//   const [password, setPassword] = useState("");
-//   //   const [visible, setVisible] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState("");
-//   const [loading, setLoading] = useState("");
-//   const [username, setUsername] = useState("");
-//   const [description, setDescription] = useState("");
-//   const fetchData = async () => {
-//     try {
-//       const response = await axios.post(
-//         "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/sign_up",
-//         {
-//           email: email,
-//           username: username,
-//           description: description,
-//           password: password,
-//         },
-//       );
-//       //   console.log("response =>", response.data);
-//       setLoading(false);
-//     } catch (error) {
-//       //   console.log("error=>", error.message);
-//       setErrorMessage(error.message);
-//     }
-//   };
-
-//   return (
-//     <KeyboardAvoidingView
-//       style={styles.container}
-//       behavior={Platform.OS === "ios" ? "padding" : "height"}
-//     >
-//       <ScrollView contentContainerStyle={styles.content}>
-//         <LogoTitle signup={signup} />
-//         <Inputs />
-//         <Link href="/signin">Already have an account ? Sign in</Link>
-//       </ScrollView>
-//     </KeyboardAvoidingView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   content: {
-//     flex: 1,
-//     justifyContent: "space-around",
-//     alignItems: "center",
-//     gap: 20,
-//     paddingBottom: 30,
-//   },
-// });

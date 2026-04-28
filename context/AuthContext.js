@@ -18,8 +18,8 @@ export const AuthContextProvider = ({ children }) => {
   const logout = async (id, token) => {
     setUserID("");
     setUserToken("");
-    await AsyncStorage.removeItem("userToken", token);
-    await AsyncStorage.removeItem("userID", id);
+    await AsyncStorage.removeItem("userToken");
+    await AsyncStorage.removeItem("userID");
     // return console.log("déconnecté");
   };
   // UseEffect A retester

@@ -10,7 +10,7 @@ import { router } from "expo-router";
 
 export default function AroundMePage() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const getLocationAndData = async () => {
@@ -47,6 +47,7 @@ export default function AroundMePage() {
         setLoading(false);
       } catch (error) {
         alert("To use this service you need to authorize location");
+        setLoading(false);
       }
     };
     getLocationAndData();

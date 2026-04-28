@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -8,18 +7,19 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+
+import axios from "axios";
+import Constants from "expo-constants";
+import Logo from "../../components/Logo";
+import Input from "../../components/Input";
+import * as ImagePicker from "expo-image-picker";
+import colors from "../../assets/colors/index.json";
+import LargeInput from "../../components/LargeInput";
 import MainButton from "../../components/MainButton";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import colors from "../../assets/colors/index.json";
-import axios from "axios";
-import * as ImagePicker from "expo-image-picker";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import Logo from "../../components/Logo";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Input from "../../components/Input";
-import LargeInput from "../../components/LargeInput";
-import Constants from "expo-constants";
 
 export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
@@ -33,156 +33,139 @@ export default function ProfilePage() {
   const { logout, userId, userToken } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-  // console.log(userId);
-
+    if (userId && userToken) {
+      fetchData();
+    }
+  }, [userId, userToken]);
   const fetchData = async () => {
+    if (!userId || !userToken) return;
+    setLoading(true);
     try {
       const { data } = await axios.get(
         `https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/${userId}`,
         {
           headers: {
-            Authorization: "Bearer" + userToken,
+            Authorization: `Bearer ${userToken}`,
           },
         },
       );
+
       setUserName(data.username);
       setEmail(data.email);
-      setDescription(data.description);
+      setDescription(data.description || "");
 
-      if (data.photo) {
+      if (data.photo?.url) {
         setPicture(data.photo.url);
       }
-      setLoading(false);
     } catch (error) {
-      alert({
-        message: error.response.data.error,
-      });
+      alert("Erreur", error.response?.data?.error || "Erreur serveur");
+    } finally {
+      setLoading(false);
     }
   };
 
   const editInformations = async () => {
-    if (pictureModified || infoModified) {
-      setLoading(true);
+    if (!pictureModified && !infoModified) {
+      alert("Change au moins une information");
+      return;
+    }
 
-      if (pictureModified) {
-        try {
-          const uri = picture;
-          const uriParts = uri.split(".");
-          const fileType = uriParts.at(-1);
+    setLoading(true);
 
-          const formData = new FormData();
-          formData.append("photo", {
-            uri,
-            name: `userPicture.${fileType}`,
-            type: `image/${fileType}`,
-          });
+    try {
+      // UPDATE PICTURE
+      if (pictureModified && picture) {
+        const fileType = picture.split(".").pop().split("?")[0];
 
-          const { data } = await axios.put(
-            `https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/upload_picture`,
-            formData,
-            {
-              headers: {
-                Authorization: "Bearer" + userToken,
-                "Content-Type": "multipart/form-data",
-              },
+        const formData = new FormData();
+        formData.append("photo", {
+          uri: picture,
+          name: `profile.${fileType}`,
+          type: `image/${fileType}`,
+        });
+
+        const { data } = await axios.put(
+          "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/upload_picture",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+              "Content-Type": "multipart/form-data",
             },
-          );
+          },
+        );
 
-          if (data) {
-            setPicture(data.photo?.url);
-
-            alert({
-              message: "Your profile has been updated",
-            });
-          }
-        } catch (error) {
-          alert({
-            message: error.response.data.error,
-          });
+        if (data?.photo?.url) {
+          setPicture(data.photo.url);
+          await fetchData();
         }
       }
 
+      // UPDATE INFOS
       if (infoModified) {
-        try {
-          const body = {
-            email: email,
-            username: userName,
-            description: description,
-          };
+        const body = {
+          email,
+          username: userName,
+          description,
+        };
 
-          const { data } = await axios.put(
-            `https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/update`,
-            body,
-            {
-              headers: {
-                Authorization: "Bearer" + userToken,
-              },
+        const { data } = await axios.put(
+          "https://lereacteur-bootcamp-api.herokuapp.com/api/airbnb/user/update",
+          body,
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
             },
-          );
+          },
+        );
 
-          if (data) {
-            setUserName(data.username);
-            setEmail(data.email);
-            setDescription(data.description);
-
-            alert({
-              message: "Your profile has been updated",
-            });
-          } else {
-            alert({
-              message: "An error occurred",
-            });
-          }
-        } catch (error) {
-          alert({
-            message: error.response.data.error,
-          });
-        }
+        setEmail(data.email);
+        setUserName(data.username);
+        setDescription(data.description || "");
       }
-      pictureModified && setPictureModified(false);
-      infoModified && setInfoModified(false);
 
+      setPictureModified(false);
+      setInfoModified(false);
+
+      alert("Succès", "Profil mis à jour");
+    } catch (error) {
+      alert("Erreur", error.response?.data?.error || "Erreur serveur");
+    } finally {
       setLoading(false);
-    } else {
-      alert({
-        message: "Change at least one information",
-      });
     }
   };
 
   const uploadPicture = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (status === "granted") {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [1, 1],
-      });
+    if (status !== "granted") return;
 
-      if (!result.canceled) {
-        setPicture(result.assets[0].uri);
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
 
-        if (!pictureModified) {
-          setPictureModified(true);
-        }
-      }
+    if (!result.canceled) {
+      setPicture(result.assets[0].uri);
+      setPictureModified(true);
     }
   };
 
   const takePicture = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
-    if (status === "granted") {
-      const result = await ImagePicker.launchCameraAsync();
+    if (status !== "granted") return;
 
-      if (!result.canceled) {
-        setPicture(result.assets[0].uri);
-        if (!pictureModified) {
-          setPictureModified(true);
-        }
-      }
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+
+    if (!result.canceled) {
+      setPicture(result.assets[0].uri);
+      setPictureModified(true);
     }
   };
 
@@ -194,22 +177,15 @@ export default function ProfilePage() {
       <View style={styles.logoContainer}>
         <Logo size="small" />
       </View>
+
       {loading ? (
-        <ActivityIndicator
-          color={colors.pink}
-          size="large"
-          style={styles.activityIndicator}
-        />
+        <ActivityIndicator color={colors.pink} size="large" />
       ) : (
         <View style={styles.mainView}>
           <View style={styles.topView}>
             <TouchableOpacity style={styles.pictureView}>
               {picture ? (
-                <Image
-                  source={{ uri: picture }}
-                  style={styles.picture}
-                  resizeMode="cover"
-                />
+                <Image source={{ uri: picture }} style={styles.picture} />
               ) : (
                 <FontAwesome5
                   name="user-alt"
@@ -218,31 +194,28 @@ export default function ProfilePage() {
                 />
               )}
             </TouchableOpacity>
+
             <View style={styles.icons}>
-              <TouchableOpacity
-                onPress={() => {
-                  uploadPicture();
-                }}
-              >
+              <TouchableOpacity onPress={uploadPicture}>
                 <MaterialIcons
                   name="photo-library"
                   size={30}
                   color={colors.grey}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.iconButton}
-                onPress={() => {
-                  takePicture();
-                }}
-              >
+
+              <TouchableOpacity style={styles.iconButton} onPress={takePicture}>
                 <FontAwesome5 name="camera" size={30} color={colors.grey} />
               </TouchableOpacity>
             </View>
           </View>
-          <Input state={email} setState={setEmail} />
+
           <Input
-            value={userName}
+            state={email}
+            setState={setEmail}
+            setInfoModified={setInfoModified}
+          />
+          <Input
             state={userName}
             setState={setUserName}
             setInfoModified={setInfoModified}
@@ -252,16 +225,10 @@ export default function ProfilePage() {
             setState={setDescription}
             setInfoModified={setInfoModified}
           />
-          <MainButton
-            text="Update"
-            func={editInformations}
-            // style={{ marginBottom: 10 }}
-          />
-          <MainButton
-            text="LOG OUT"
-            func={logout}
-            // backgroundColor={colors.grey}
-          />
+          <View style={styles.buttonsContainer}>
+            <MainButton text="Update" func={editInformations} />
+            <MainButton text="LOG OUT" func={logout} />
+          </View>
         </View>
       )}
     </KeyboardAvoidingView>
@@ -275,10 +242,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgColor,
     marginTop: Constants.statusBarHeight,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
   mainView: {
     alignItems: "center",
   },
@@ -286,7 +249,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 10,
   },
   pictureView: {
     marginVertical: 20,
@@ -310,9 +273,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   iconButton: {
-    marginTop: 40,
+    marginTop: 25,
   },
-  view: {
-    height: 30,
+  buttonsContainer: {
+    width: "100%",
+    gap: 12,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
