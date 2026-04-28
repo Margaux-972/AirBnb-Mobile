@@ -41,17 +41,28 @@ React Hooks
   ├── LargeInput
   ├── MainButton
   ├── Logo
+  ├── MapCompo
+  ├── RoomCard
+  ├── Logo
   └── RedirectButton
 
 /context
   └── AuthContext.js
 
-/screens
-  ├── auth
-  │   ├── login.js
+app
+  ├── (auth)
+  |   ├── _layout.js
+  │   ├── index.js
   │   └── signup.js
-  ├── profile
-  │   └── index.js
+  ├── (main)
+  |   ├── home
+  │   |   ├── _layout.js
+  |   |   ├── room.js
+  |   |   └── rooms.js
+  |   ├── _layout.js
+  |   ├── map.js
+  │   └── profile.js
+  └── _layout.js
 
 /assets
   └── colors
